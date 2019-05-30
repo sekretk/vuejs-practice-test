@@ -32,14 +32,14 @@
 
 <script>
 export default {
+    computed: {
+        clients(){
+            return this.$store.state.clients
+        }
+    },
 data(){
     return {
-        drawer: false,
-        clients: [
-            { id: 1, name: 'Client 1' },
-            { id: 2, name: 'Client 2' },
-            { id: 3, name: 'Client 3' },
-        ]
+        drawer: false        
     }
 }
 }

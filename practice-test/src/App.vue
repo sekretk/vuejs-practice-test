@@ -3,8 +3,8 @@
     <navbar/>
     <v-content>
       <router-view></router-view>
-    </v-content>
-  </v-app>
+    </v-content>    
+  </v-app>  
 </template>
 
 <script>
@@ -15,6 +15,7 @@ export default {
   components: { navbar },
   data () {
     return {
+      login: false
       //
     }
   }
