@@ -2,9 +2,11 @@
     <nav>
         <v-toolbar app flat>
             <v-toolbar-side-icon class="grey--text" @click="drawer = !drawer"></v-toolbar-side-icon>
-            <v-toolbar-title class="text-uppercase grey--text">
-                <span class="font-weight-light">loan</span>
-                <span>manager</span>
+            <v-toolbar-title class="text-uppercase grey--text" >
+                <!-- <router-link class="text-uppercase grey--text" to="/"> -->
+                    <span class="font-weight-light">loan</span>
+                    <span>manager</span>
+                <!-- </router-link> -->
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn flat color="grey">
@@ -15,7 +17,7 @@
 
         <v-navigation-drawer v-model="drawer" app class="indigo">
             <v-list>
-                <v-list-tile v-for="client in clients" :key="client.id" router v-bind:to="'/clients/' + client.id" absolute>
+                <v-list-tile v-for="client in clients" :key="client.id" router :to="'/client/' + client.id" absolute>
                     <v-list-tile-action>
                         <v-icon class="white--text">dashboard</v-icon>
                     </v-list-tile-action>
