@@ -3,8 +3,25 @@ import Router from 'vue-router'
 import Dashboard from './views/Dashboard.vue'
 import Client from './views/Client.vue'
 import Login from './views/Login.vue'
+import store from './store/store'
 
 Vue.use(Router)
+
+const ifNotAuthenticated = (to, from, next) => {
+  if (!store.getters.isAuthenticated) {
+    next()
+    return
+  }
+  next('/')
+}
+
+const ifAuthenticated = (to, from, next) => {
+  if (store.getters.isAuthenticated) {
+    next()
+    return
+  }
+  next('/login')
+}
 
 export default new Router({
   mode: 'history',
@@ -14,25 +31,19 @@ export default new Router({
       path: '/',
       name: 'dashboard',
       component: Dashboard,
-      meta: { 
-        requiresAuth: true
-    }
+      beforeEnter: ifAuthenticated,
     },
     {
       path: '/client/:id',
       name: 'client',
       component: Client,
-      meta: { 
-        requiresAuth: true
-    }
+      beforeEnter: ifAuthenticated,
     },
     {
       path: '/login',
       name: 'login',
       component: Login,
-      meta: {
-        guest: true
-      }
+      beforeEnter: ifNotAuthenticated,
     },
   ]
 })

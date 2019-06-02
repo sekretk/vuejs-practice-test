@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import {AUTH_REQUEST} from '../store/actions/auth'
+
 export default {
   data() {
     return {
@@ -33,18 +35,24 @@ export default {
   },
   methods: {
             proceedLogin() {
-                if(this.login != "" && this.password != "") {
-                    if(this.login == 'test' && this.password == 'open') {
-                        this.$emit("authenticated", true);
-                        this.$router.replace({ name: "/" });
-                    } else {
-                      // eslint-disable-next-line
-                        console.log("The login and / or password is incorrect");
-                    }
-                } else {
-                  // eslint-disable-next-line
-                    console.log("A login and password must be present");
-                }
+              const { username, password } = this
+
+                this.$store.dispatch(AUTH_REQUEST, { username, password }).then(() => {
+                      this.$router.push('/')
+                    })
+
+                // if(this.login != "" && this.password != "") {
+                //     if(this.login == 'test' && this.password == 'open') {
+                //         this.$emit("authenticated", true);
+                //         this.$router.push({ name: "/" });
+                //     } else {
+                //       // eslint-disable-next-line
+                //         console.log("The login and / or password is incorrect");
+                //     }
+                // } else {
+                //   // eslint-disable-next-line
+                //     console.log("A login and password must be present");
+                // }
             }
         }
 };
