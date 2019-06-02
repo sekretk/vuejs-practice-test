@@ -9,7 +9,7 @@
                 <!-- </router-link> -->
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn flat color="grey">
+            <v-btn flat color="grey" @click="logout">
                 <span>Sign out</span>
                 <v-icon right>exit_to_app</v-icon>
             </v-btn>
@@ -31,11 +31,18 @@
 </template>
 
 <script>
+import { AUTH_LOGOUT } from '../store/actions/auth'
+
 export default {
     computed: {
         clients(){
             return this.$store.state.clients
         }
+    },
+    methods: {
+      logout: function () {
+        this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/login'))
+      }
     },
 data(){
     return {
