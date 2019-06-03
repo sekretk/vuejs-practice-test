@@ -1,15 +1,15 @@
 <template>
-  <v-card>
+  <v-card class="login-form">
     <v-card-title>
       <span class="headline">Login</span>
     </v-card-title>
     <v-card-text>
       <v-container grid-list-md>
         <v-layout wrap>
-          <v-flex xs8>
+          <v-flex xs12>
             <v-text-field label="Email*" required v-model="login"></v-text-field>
           </v-flex>
-          <v-flex xs8>
+          <v-flex xs12>
             <v-text-field label="Password*" type="password" required v-model="password"></v-text-field>
           </v-flex>
         </v-layout>
