@@ -1,6 +1,10 @@
 <template>
   <div class="clients">
     <p>Client {{ $route.params.id }}</p>
+    <v-btn flatcolor="info" @click="addNote">
+      <span>Add Note</span>
+      <v-icon right>add_circle_outline</v-icon>
+    </v-btn>
     <v-container class="my-5">
       <v-list two-line>
         <template v-for="note in notes">
@@ -19,6 +23,21 @@
         </template>
       </v-list>
     </v-container>
+    <v-dialog v-model="addNoteDialog" persistent max-width="600px">      
+      <v-card>
+        <v-card-title>
+          <span class="headline">New note</span>
+        </v-card-title>
+        <v-card-text>
+          <note-editor></note-editor>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click="addNoteDialog = false">Close</v-btn>
+          <v-btn color="blue darken-1" flat @click="addNoteDialog = false">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -27,7 +46,7 @@ export default {
   data() {
     return {
       addNoteDialog: false,
-      editableNote: null,      
+      editableNote: null,
       notes: [
         {
           id: 1,
@@ -73,14 +92,17 @@ export default {
     };
   },
   methods: {
-      select (item) {
-        item.stared = !item.stared;
-      },
-      open(item){
-        this.editableNote = JSON.parse(JSON.stringify(item));
-        this.addNoteDialog = true;
-      }
+    select(item) {
+      item.stared = !item.stared;
+    },
+    open(item) {
+      this.editableNote = JSON.parse(JSON.stringify(item));
+      this.addNoteDialog = true;
+    },
+    addNote(){      
+      this.addNoteDialog = true;
     }
+  }
 };
 </script>
 

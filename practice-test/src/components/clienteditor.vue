@@ -71,6 +71,14 @@ export default {
     return {
       datemenu: false,
       Name: "new client",
+      Phone: 0,
+      TaxID: 111111111,
+      Address: "Evergreen st. 123",
+      DateOpened: Date.now(),
+      Type: "LLC",
+      ContactName: "",
+      ContactPhone: "",
+      ContactEmail: ""
 
     };
   }
