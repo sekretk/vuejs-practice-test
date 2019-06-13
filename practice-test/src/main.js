@@ -4,11 +4,18 @@ import App from './App.vue'
 import router from './router'
 import store from './store/store.js'
 import './assets/styles.css'
-import clientEditor from './components/client'
+import clientEditor from './components/clienteditor'
+import moment from 'moment'
 
 Vue.config.productionTip = false
 
 Vue.component('client-editor', clientEditor);
+
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(value).format('MM/DD/YYYY hh:mm')
+  }
+});
 
 new Vue({
   router,

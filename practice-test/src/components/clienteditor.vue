@@ -6,7 +6,7 @@
       </v-flex>
 
       <v-flex xs12 sm4 md4>
-        <v-text-field label="Phone" v-model="Phone" mask="phone"></v-text-field>
+        <v-text-field label="Phone" v-model="Phone" mask="+7-(###)-###-##-##"></v-text-field>
       </v-flex>
 
       <v-flex xs12 sm4 md4>
@@ -67,10 +67,12 @@
 
 <script>
 export default {
-  data(){
+  data() {
     return {
-    datemenu: false
-    }
+      datemenu: false,
+      Name: "new client",
+
+    };
   }
 };
 </script>
