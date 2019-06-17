@@ -8,7 +8,7 @@
     <v-container class="my-5">
       <v-list two-line>
         <template v-for="note in notes">
-          <v-list-tile :key="note.id" avatar ripple @click="open(note)">
+          <v-list-tile :key="note.id" avatar ripple @click="open(note)" :class="note.state">
             <v-list-tile-content>
               <v-list-tile-title>{{ note.name }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ note.description }}</v-list-tile-sub-title>
@@ -54,6 +54,7 @@ export default {
           description: "mortgage loan for infinity years",
           date: Date.now(),
           initbalance: 10000,
+          state: "alive",
           stared: true
         },
         {
@@ -62,6 +63,7 @@ export default {
           description: "sv loan for country travel",
           date: Date.now(),
           initbalance: 10000,
+          state: "alive",
           stared: true
         },
         {
@@ -70,6 +72,7 @@ export default {
           description: "mr plow is on the go",
           date: Date.now(),
           initbalance: 10000,
+          state: "overdue",
           stared: false
         },
         {
@@ -78,6 +81,7 @@ export default {
           description: "microloan for some stuff",
           date: Date.now(),
           initbalance: 10000,
+          state: "highlyrisked",
           stared: false
         },
         {
@@ -86,6 +90,7 @@ export default {
           description: "education loan till the backet",
           date: Date.now(),
           initbalance: 10000,
+          state: "longterm",
           stared: false
         }
       ]
@@ -107,5 +112,20 @@ export default {
 </script>
 
 <style>
+.alive{
+  border-left: 4px solid green;
+}
+
+.overdue{
+  border-left: 4px solid red;
+}
+
+.highlyrisked{
+  border-left: 4px solid orange;
+}
+
+.longterm {
+  border-left: 4px solid royalblue;
+}
 </style>
 

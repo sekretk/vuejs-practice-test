@@ -9,10 +9,16 @@
 
 <script>
 import navbar from '@/components/navbar'
+import { USER_REQUEST } from '@/store/actions/user'
 
 export default {
   name: 'App',
   components: { navbar },
+  created: function () {
+    if (this.$store.getters.isAuthenticated) {
+      this.$store.dispatch(USER_REQUEST)
+    }
+  },
   data () {
     return {
       login: false

@@ -1,38 +1,51 @@
 <template>
-    <nav>
-        <v-toolbar app flat>
-            <v-toolbar-side-icon class="grey--text" @click="drawer = !drawer"></v-toolbar-side-icon>
-            <v-toolbar-title class="text-uppercase grey--text" >
-                <!-- <router-link class="text-uppercase grey--text" to="/"> -->
-                    <span class="font-weight-light">loan</span>
-                    <span>manager</span>
-                <!-- </router-link> -->
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn flat color="grey" @click="logout">
-                <span>Sign out</span>
-                <v-icon right>exit_to_app</v-icon>
-            </v-btn>
-        </v-toolbar>
+  <nav>
+    <v-toolbar app flat>
+      <v-toolbar-side-icon class="grey--text" @click="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title class="text-uppercase grey--text">
+        <!-- <router-link class="text-uppercase grey--text" to="/"> -->
+        <span class="font-weight-light">loan</span>
+        <span>manager</span>
+        <!-- </router-link> -->
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
 
-        <v-navigation-drawer v-model="drawer" app class="indigo">
-            <v-btn block flatcolor="info" @click="addClient">
-                <span>Add Client</span>
-                <v-icon right>add_circle_outline</v-icon>
-            </v-btn>
-            <v-list>
-                <v-list-tile v-for="client in clients" :key="client.id" router :to="'/client/' + client.id" absolute>
-                    <v-list-tile-action>
-                        <v-icon class="white--text">dashboard</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title class="white--text">{{client.name}}</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
-            </v-list>
-        </v-navigation-drawer>
+      <div v-if="isProfileLoaded">{{name}}</div>
 
- <v-dialog v-model="addClientDialog" persistent max-width="600px">
+      <v-btn flat color="grey" @click="logout" v-if="!isAuthenticated && !authLoading">
+        <span>Login</span>
+        <v-icon right>insert_link</v-icon>
+      </v-btn>
+      <v-btn flat color="grey" @click="logout" v-if="isAuthenticated">
+        <span>Sign out</span>
+        <v-icon right>exit_to_app</v-icon>
+      </v-btn>
+    </v-toolbar>
+
+    <v-navigation-drawer v-model="drawer" app class="indigo">
+      <v-btn block flatcolor="info" @click="addClient">
+        <span>Add Client</span>
+        <v-icon right>add_circle_outline</v-icon>
+      </v-btn>
+      <v-list>
+        <v-list-tile
+          v-for="client in clients"
+          :key="client.id"
+          router
+          :to="'/client/' + client.id"
+          absolute
+        >
+          <v-list-tile-action>
+            <v-icon class="white--text">dashboard</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title class="white--text">{{client.name}}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-dialog v-model="addClientDialog" persistent max-width="600px">
       <template v-slot:activator="{ on }">
         <v-btn color="primary" dark v-on="on">Open Dialog</v-btn>
       </template>
@@ -50,36 +63,40 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    </nav>
+  </nav>
 </template>
 
 <script>
-import { AUTH_LOGOUT } from '../store/actions/auth'
+import { AUTH_LOGOUT } from "../store/actions/auth";
+import { mapGetters, mapState } from "vuex";
 
 export default {
-    computed: {
-        clients(){
-            return this.$store.state.clients
-        }
+  methods: {
+    logout: function() {
+      this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push("/login"));
     },
-    methods: {
-      logout: function () {
-        this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/login'))
-      },
-      addClient: function(){
-        this.addClientDialog = true;
-      }
-    },
-data(){
-    return {
-        drawer: false,
-        addClientDialog: false,        
+    addClient: function() {
+      this.addClientDialog = true;
     }
-}
-}
+  },
+  data() {
+    return {
+      drawer: false,
+      addClientDialog: false
+    };
+  },
+  computed: {
+    ...mapGetters(["getProfile", "isAuthenticated", "isProfileLoaded"]),
+    ...mapState({
+      authLoading: state => state.auth.status === "loading",
+      name: state => `${state.user.profile.title} ${state.user.profile.name}`
+    }),
+    clients() {
+      return this.$store.state.clients;
+    }
+  }
+};
 </script>
 
 <style>
-
 </style>
