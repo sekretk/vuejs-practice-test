@@ -1,11 +1,29 @@
 <template>
   <div class="clients">
-    <p>Client {{ $route.params.id }}</p>
-    <v-btn flatcolor="info" @click="addNote">
-      <span>Add Note</span>
-      <v-icon right>add_circle_outline</v-icon>
-    </v-btn>
     <v-container class="my-5">
+      <v-layout row class="mb-3">
+        <p>Client {{ $route.params.id }}</p>
+      </v-layout>
+
+      <v-layout row class="mb-3">
+        <v-btn flatcolor="info">
+          <span>Add Note</span>
+          <v-icon left small>date_range</v-icon>
+        </v-btn>
+      </v-layout>
+
+      <v-layout row class="mb-3">
+        <v-btn small flat color="grey" @click="sort('state')">
+          <span class="caption text-lowercase">by state</span>
+          <v-icon right>date_range</v-icon>
+        </v-btn>
+
+        <v-btn small flat color="grey" flatcolor="info" @click="sort('name')">
+          <span class="caption text-lowercase">by name</span>
+          <v-icon right>person</v-icon>
+        </v-btn>
+      </v-layout>
+
       <v-list two-line>
         <template v-for="note in notes">
           <v-list-tile :key="note.id" avatar ripple @click="open(note)" :class="note.state">
@@ -16,14 +34,17 @@
 
             <v-list-tile-action>
               <v-list-tile-action-text>{{ note.date | formatDate }}</v-list-tile-action-text>
-              <v-icon v-if="!note.stared" color="grey lighten-1" @click="select(note)">star_border</v-icon>
-              <v-icon v-else color="yellow darken-2" @click="select(note)">star</v-icon>
+              <div>
+                <v-chip small :class="[note.state, 'white--text', 'caption', 'my-2']">{{note.state}}</v-chip>
+                <v-icon v-if="!note.stared" color="grey lighten-1">star_border</v-icon>
+                <v-icon v-else color="yellow darken-2" @click="select(note)">star</v-icon>
+              </div>
             </v-list-tile-action>
           </v-list-tile>
         </template>
       </v-list>
     </v-container>
-    <v-dialog v-model="addNoteDialog" persistent max-width="600px">      
+    <v-dialog v-model="addNoteDialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
           <span class="headline">New note</span>
@@ -47,6 +68,7 @@ export default {
     return {
       addNoteDialog: false,
       editableNote: null,
+      sortedProp: "",
       notes: [
         {
           id: 1,
@@ -104,28 +126,61 @@ export default {
       this.editableNote = JSON.parse(JSON.stringify(item));
       this.addNoteDialog = true;
     },
-    addNote(){      
+    addNote() {
       this.addNoteDialog = true;
+    },
+    sort(prop) {
+      let self = this;
+
+      if (self.sortedProp != "-" + prop) {
+        self.sortedProp = "-" + prop;
+      } else {
+        self.sortedProp = prop;
+      }
+
+      this.notes.sort((a, b) => {
+        if (self.sortedProp != "-" + prop) {
+          return a[prop] < b[prop] ? 1 : -1;
+        }
+
+        return a[prop] < b[prop] ? -1 : 1;
+      });
     }
   }
 };
 </script>
 
 <style>
-.alive{
+.v-list > .alive {
   border-left: 4px solid green;
 }
 
-.overdue{
+.v-list > .overdue {
   border-left: 4px solid red;
 }
 
-.highlyrisked{
+.v-list > .highlyrisked {
   border-left: 4px solid orange;
 }
 
-.longterm {
+.v-list > .longterm {
   border-left: 4px solid royalblue;
+}
+
+.v-chip.alive {
+  background: green;
+}
+
+.v-chip.highlyrisked {
+  background: orange;
+}
+
+.v-chip.overdue {
+  background: red;
+}
+
+.v-chip.longterm {
+  background: royalblue;
 }
 </style>
 
