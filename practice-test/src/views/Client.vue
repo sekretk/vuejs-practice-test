@@ -13,15 +13,21 @@
       </v-layout>
 
       <v-layout row class="mb-3">
-        <v-btn small flat color="grey" @click="sort('state')">
-          <span class="caption text-lowercase">by state</span>
-          <v-icon right>date_range</v-icon>
-        </v-btn>
+        <v-tooltip top>
+          <v-btn small flat color="grey" @click="sort('state')" slot="activator">
+            <span class="caption text-lowercase">by state</span>
+            <v-icon right>date_range</v-icon>
+          </v-btn>
+          <span>Sort notes by state</span>
+        </v-tooltip>
 
-        <v-btn small flat color="grey" flatcolor="info" @click="sort('name')">
-          <span class="caption text-lowercase">by name</span>
-          <v-icon right>person</v-icon>
-        </v-btn>
+        <v-tooltip top>
+          <v-btn small flat color="grey" flatcolor="info" @click="sort('name')" slot="activator">
+            <span class="caption text-lowercase">by name</span>
+            <v-icon right>person</v-icon>
+          </v-btn>
+          <span>Sort notes by name</span>
+        </v-tooltip>
       </v-layout>
 
       <v-list two-line>
