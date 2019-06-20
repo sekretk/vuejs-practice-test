@@ -54,12 +54,12 @@
           <span class="headline">New client</span>
         </v-card-title>
         <v-card-text>
-          <client-editor></client-editor>
+          <client-editor v-model="newClient"></client-editor>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click="addClientDialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click="addClientDialog = false">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click="closeDialog">Close</v-btn>
+          <v-btn color="blue darken-1" flat @click="saveClient">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -69,6 +69,7 @@
 <script>
 import { AUTH_LOGOUT } from "../store/actions/auth";
 import { mapGetters, mapState } from "vuex";
+const fb = require("@/store/firebaseConfig.js");
 
 export default {
   methods: {
@@ -77,12 +78,39 @@ export default {
     },
     addClient: function() {
       this.addClientDialog = true;
+    },
+    closeDialog: function() {
+      this.addClientDialog = false;
+    },
+    saveClient: function() {
+      this.addClientDialog = false;
+
+      fb.clientsCollection
+        .add(this.newClient)
+        .then(ref => {
+          console.log(ref);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   data() {
     return {
       drawer: false,
-      addClientDialog: false
+      addClientDialog: false,
+      newClient: {
+        datemenu: false,
+        Name: "new client",
+        Phone: 0,
+        TaxID: 111111111,
+        Address: "Evergreen st. 123",
+        DateOpened: Date.now(),
+        Type: "LLC",
+        ContactName: "",
+        ContactPhone: "",
+        ContactEmail: ""
+      }
     };
   },
   computed: {
