@@ -20,11 +20,6 @@ const store = new Vuex.Store({
             { id: 4, name: 'Lisa Simpson', avatar: 'images/lisa.png' },
         ]
     },
-    getters: {
-        getNotesByClient: (state, getters) => (clientId) => {            
-            return state.movies.find(movie => movie.id === id)
-        }
-    },
     mutations: {
         setClients(state, items) {
             state.clients = items;

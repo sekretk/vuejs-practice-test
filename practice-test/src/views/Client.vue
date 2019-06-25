@@ -2,11 +2,11 @@
   <div class="clients">
     <v-container class="my-5">
       <v-layout row class="mb-3">
-        <p>Client {{ $route.params.id }}</p>
+        <p>Client {{ client.Name }}</p>
       </v-layout>
 
       <v-layout row class="mb-3">
-        <v-btn flatcolor="info">
+        <v-btn flatcolor="info" @click="addNote">
           <span>Add Note</span>
           <v-icon left small>date_range</v-icon>
         </v-btn>
@@ -69,12 +69,18 @@
 </template>
 
 <script>
+const fb = require("@/store/firebaseConfig.js");
+
+fb.clientsCollection;
+
 export default {
   data() {
     return {
       addNoteDialog: false,
       editableNote: null,
       sortedProp: "",
+      clientId: this.$route.params.id,
+      client: null,
       notes: [
         {
           id: 1,
@@ -124,7 +130,25 @@ export default {
       ]
     };
   },
+  mounted() {
+    this.init();
+  },
   methods: {
+    init() {
+      fb.clientsCollection
+        .doc(this.clientId)
+        .get()
+        .then(doc => {
+          if (!doc.exists) {
+            this.$router.push("/404");
+            return;
+          }
+
+          this.client = doc.data();
+
+          console.log(this.client);
+        });
+    },
     select(item) {
       item.stared = !item.stared;
     },
@@ -134,6 +158,24 @@ export default {
     },
     addNote() {
       this.addNoteDialog = true;
+
+      fb.notesCollection
+        .add({ clientId: this.clientId, data: "asdasdasd" })
+        .then(ref => {
+          console.log(ref);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+      fb.notesCollection
+        .where("clientId", "==", this.clientId)
+        .get()
+        .then(docs => {
+          docs.forEach(doc => {
+            console.log(doc.id, doc.data().clientId, doc.data().data);
+          });
+        });
     },
     sort(prop) {
       let self = this;
