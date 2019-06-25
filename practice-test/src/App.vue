@@ -17,7 +17,15 @@ export default {
   created: function() {
     if (this.$store.getters.isAuthenticated) {
       this.$store.dispatch(USER_REQUEST);
-    }    
+    }
+  },
+  mounted() {
+    this.getClients();
+  },
+  methods: {
+    getClients() {
+      this.$store.dispatch("getClients");
+    }
   },
   data() {
     return {

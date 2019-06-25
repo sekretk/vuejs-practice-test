@@ -39,7 +39,7 @@
             <v-icon class="white--text">dashboard</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title class="white--text">{{client.name}}</v-list-tile-title>
+            <v-list-tile-title class="white--text">{{client.Name}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -71,6 +71,19 @@ import { AUTH_LOGOUT } from "../store/actions/auth";
 import { mapGetters, mapState } from "vuex";
 const fb = require("@/store/firebaseConfig.js");
 
+const emptyClient = {
+  datemenu: false,
+  Name: "new client",
+  Phone: 0,
+  TaxID: 111111111,
+  Address: "Evergreen st. 123",
+  DateOpened: Date.now(),
+  Type: "LLC",
+  ContactName: "",
+  ContactPhone: "",
+  ContactEmail: ""
+};
+
 export default {
   methods: {
     logout: function() {
@@ -92,25 +105,16 @@ export default {
         })
         .catch(err => {
           console.log(err);
-        });
+        });      
+
+      this.newClient = {...emptyClient};
     }
   },
   data() {
     return {
       drawer: false,
       addClientDialog: false,
-      newClient: {
-        datemenu: false,
-        Name: "new client",
-        Phone: 0,
-        TaxID: 111111111,
-        Address: "Evergreen st. 123",
-        DateOpened: Date.now(),
-        Type: "LLC",
-        ContactName: "",
-        ContactPhone: "",
-        ContactEmail: ""
-      }
+      newClient: JSON.parse(JSON.stringify(emptyClient))
     };
   },
   computed: {

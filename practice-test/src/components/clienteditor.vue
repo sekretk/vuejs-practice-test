@@ -41,13 +41,13 @@
         </v-menu>
       </v-flex>
 
-      <v-flex xs12 sm6 md6>
+      <!-- <v-flex xs12 sm6 md6>
         <v-autocomplete
           :items="['Individual', 'LLC', 'LLP', 'S Corp', 'Partnership', 'Other']"
           label="Client Type"
           v-model="Type"
         ></v-autocomplete>
-      </v-flex>
+      </v-flex> -->
 
       <v-flex xs12 sm4 md4>
         <v-text-field label="Contant name" v-model="value.ContactName"></v-text-field>
