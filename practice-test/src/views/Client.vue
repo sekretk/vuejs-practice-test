@@ -2,7 +2,7 @@
   <div class="clients">
     <v-container class="my-5">
       <v-layout row class="mb-3">
-        <p>Client {{ client.Name }}</p>
+        <p>Client {{ client ? client.Name : '' }}</p>
       </v-layout>
 
       <v-layout row class="mb-3">
@@ -65,17 +65,28 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
+      <v-container fill-height>
+        <v-layout row justify-center align-center>
+          <v-progress-circular :size="70" :width="7" color="purple" indeterminate></v-progress-circular>
+        </v-layout>
+      </v-container>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 const fb = require("@/store/firebaseConfig.js");
 
-fb.clientsCollection;
+
+const calls = [  
+];
 
 export default {
+
   data() {
     return {
+      loading: false,
       addNoteDialog: false,
       editableNote: null,
       sortedProp: "",
@@ -135,19 +146,39 @@ export default {
   },
   methods: {
     init() {
-      fb.clientsCollection
+
+      this.loading = true
+
+      calls.push(fb.clientsCollection
         .doc(this.clientId)
         .get()
-        .then(doc => {
+        .then(doc => {          
           if (!doc.exists) {
-            this.$router.push("/404");
+            this.$router.push({
+              name: "error",
+              params: {
+                message: `client with id ${this.clientId} not found`
+              }
+            });
             return;
           }
 
           this.client = doc.data();
+        }))
 
-          console.log(this.client);
-        });
+        calls.push(fb.notesCollection
+        .where("clientId", "==", this.clientId)
+        .get()
+        .then(docs => {
+          const resultArray = []
+          docs.forEach(doc => {            
+            resultArray.push({ ...doc.data(), id: doc.id })
+          });
+
+          this.notes = resultArray
+        }))
+
+        Promise.all(calls).finally(() => this.loading = false)
     },
     select(item) {
       item.stared = !item.stared;
@@ -166,16 +197,7 @@ export default {
         })
         .catch(err => {
           console.log(err);
-        });
-
-      fb.notesCollection
-        .where("clientId", "==", this.clientId)
-        .get()
-        .then(docs => {
-          docs.forEach(doc => {
-            console.log(doc.id, doc.data().clientId, doc.data().data);
-          });
-        });
+        });      
     },
     sort(prop) {
       let self = this;

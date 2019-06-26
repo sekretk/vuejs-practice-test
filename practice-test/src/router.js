@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Dashboard from './views/Dashboard.vue'
 import Client from './views/Client.vue'
 import Login from './views/Login.vue'
+import Error from './views/Error.vue'
 import store from './store/store'
 
 Vue.use(Router)
@@ -44,6 +45,12 @@ export default new Router({
       name: 'login',
       component: Login,
       beforeEnter: ifNotAuthenticated,
+    },
+    {
+      path: '/error',
+      name: 'error',
+      component: Error,
+      props: true,
     },
   ]
 })
